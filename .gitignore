@@ -5,3 +5,4 @@ db.sqlite3
 
 */migrations/*.pyc
 django.code-workspace
+.vscode/settings.json
