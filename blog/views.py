@@ -6,8 +6,19 @@ from .data.posts import posts
 
 # Create your views here.
 
-def home(request):
-  res = render(request, "blog/home.html",{
-    "posts": [posts[0], posts[1], posts[2]]
+def home(req):
+  first_posts = posts[:3]
+  res = render(req, "blog/home.html",{
+    "posts": first_posts
   })
   return res
+
+def index(req):
+  res = render(req, "blog/index.html", {
+    "posts":posts
+  })
+  return res
+
+def redirect_details(req, num):
+  redirected_url = reverse("post-details", args=[posts[num-1]])
+  return HttpResponseRedirect(redirected_url)
