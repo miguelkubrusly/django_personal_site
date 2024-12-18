@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+My Blog - {{post.title|slice:":6"|title}}  
+{% endblock page_title %}
+
+{% block content %}
+  <h2>{{post.title|title}}</h2>
+  <p>{{post.content}}</p>  
+{% endblock content %}

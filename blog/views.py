@@ -22,3 +22,14 @@ def index(req):
 def redirect_details(req, num):
   redirected_url = reverse("post-details", args=[posts[num-1]])
   return HttpResponseRedirect(redirected_url)
+
+def details(req, slug):
+  post = next((post for post in posts if post.get("slug")==slug), None)
+  if post != None:
+    post_html = render(req, "blog/details.html", {
+      "post": post
+    })
+    return post_html
+  else:
+    raise Http404
+  
