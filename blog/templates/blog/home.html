@@ -8,9 +8,15 @@ My Blog - Home Page
 
 {% if posts != None %}
   {% for post in posts %}
-    <h1>{{post.title}}</h1>
-    <p>{{post.content}}</p>
+    <a href="{% url 'post-details' post.slug %}">
+      <h1>{{post.title}}</h1>
+      <p>{{post.content}}</p>
+    </a>
   {% endfor %}
+  <a href="{% url 'index' %}">
+    All Posts
+  </a>
+
 {% else %}  
   <h1>No posts on the blog yet.</h1>
 {% endif %}
