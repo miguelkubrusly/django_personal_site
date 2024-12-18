@@ -16,7 +16,7 @@ My Blog - Posts Index
         {% if post.content|length <= 100 %}
           <p>{{post.content}}</p>
         {% else %}
-          <p>{{post.content|slice:":101"}}...</p>
+          <p>{{post.content|slice:":301"}}...</p>
         {% endif %}
         <hr/>
       </a>
