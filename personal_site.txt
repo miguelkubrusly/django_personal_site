@@ -1,128 +1,3 @@
-===== Caminho: blog/migrations/__init__.py =====
-
-===== Caminho: blog/apps.py =====
-from django.apps import AppConfig
-
-
-class BlogConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'blog'
-
-===== Caminho: blog/views.py =====
-from django.shortcuts import render
-from django.urls import reverse
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-
-from .data.posts import posts
-
-# Create your views here.
-
-def home(req):
-  first_posts = posts[:3]
-  res = render(req, "blog/home.html",{
-    "posts": first_posts
-  })
-  return res
-
-def index(req):
-  res = render(req, "blog/index.html", {
-    "posts":posts
-  })
-  return res
-
-def redirect_details(req, num):
-  redirected_url = reverse("post-details", args=[posts[num-1]])
-  return HttpResponseRedirect(redirected_url)
-
-def details(req, slug):
-  post = next((post for post in posts if post.get("slug")==slug), None)
-  if post != None:
-    post_html = render(req, "blog/details.html", {
-      "post": post
-    })
-    return post_html
-  else:
-    raise Http404
-  
-===== Caminho: blog/data/posts.py =====
-from django.utils.text import slugify
-
-def slugify_title(title):
-  title_words = title.strip().split(" ")
-  if len(title_words) > 5:
-    title_words = title_words[:6]    
-  formatted_title_words = [word.lower() for word in title_words]
-  slug = slugify("-".join(formatted_title_words))
-  return slug
-
-posts_no_url = [
-  {
-    "id":0,
-    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
-    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
-  },
-  {
-    "id":1,
-    "title":"Elit officia commodo aute fugiat dolor ea",
-    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
-  },
- {
-    "id":2,
-    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
-    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
-  },
-  {
-    "id":3,
-    "title":"Elit officia commodo aute fugiat dolor ea",
-    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
-  },{
-    "id":4,
-    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
-    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
-  },
-  {
-    "id":5,
-    "title":"Elit officia commodo aute fugiat dolor ea",
-    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
-  },
-]
-
-urls = [slugify_title(post["title"]) for post in posts_no_url]
-
-posts = [{
-  **post,
-  "slug": slugify_title(post["title"]) 
-} for post in posts_no_url]
-===== Caminho: blog/tests.py =====
-from django.test import TestCase
-
-# Create your tests here.
-
-===== Caminho: blog/__init__.py =====
-
-===== Caminho: blog/models.py =====
-from django.db import models
-
-# Create your models here.
-
-===== Caminho: blog/admin.py =====
-from django.contrib import admin
-
-# Register your models here.
-
-===== Caminho: blog/urls.py =====
-from . import views
-from django.urls import path
-
-urlpatterns = [
-    path("", views.home, name="home"),
-    path("posts/", views.index, name="index"),
-    path("posts/<int:num>/", views.redirect_details, name="numeric-details"),
-    path("posts/<str:slug>/", views.details, name="post-details"),
-]
-
-===== Caminho: personal_site/__init__.py =====
-
 ===== Caminho: personal_site/asgi.py =====
 """
 ASGI config for personal_site project.
@@ -272,23 +147,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-===== Caminho: personal_site/wsgi.py =====
-"""
-WSGI config for personal_site project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
-"""
-
-import os
-
-from django.core.wsgi import get_wsgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'personal_site.settings')
-
-application = get_wsgi_application()
+===== Caminho: personal_site/__init__.py =====
 
 ===== Caminho: personal_site/urls.py =====
 """
@@ -315,6 +174,24 @@ urlpatterns = [
     path("", include("blog.urls"))
 ]
 
+===== Caminho: personal_site/wsgi.py =====
+"""
+WSGI config for personal_site project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
+"""
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'personal_site.settings')
+
+application = get_wsgi_application()
+
 ===== Caminho: manage.py =====
 #!/usr/bin/env python3
 """Django's command-line utility for administrative tasks."""
@@ -339,49 +216,221 @@ def main():
 if __name__ == '__main__':
     main()
 
-===== Caminho: blog/static/blog/post.css =====
-.post {
+===== Caminho: blog/data/posts.py =====
+from django.utils.text import slugify
+
+def slugify_title(title):
+  title_words = title.strip().split(" ")
+  if len(title_words) > 5:
+    title_words = title_words[:6]    
+  formatted_title_words = [word.lower() for word in title_words]
+  slug = slugify("-".join(formatted_title_words))
+  return slug
+
+posts_no_url = [
+  {
+    "id":0,
+    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
+    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
+  },
+  {
+    "id":1,
+    "title":"Elit officia commodo aute fugiat dolor ea",
+    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
+  },
+ {
+    "id":2,
+    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
+    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
+  },
+  {
+    "id":3,
+    "title":"Elit officia commodo aute fugiat dolor ea",
+    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
+  },{
+    "id":4,
+    "title":"Cillum irure mollit reprehenderit aliqua voluptate veniam eu",
+    "content":"Sint aliquip velit tempor ut qui minim ipsum exercitation est esse incididunt elit est consequat. Non ea ipsum irure commodo consequat mollit. Exercitation tempor elit reprehenderit et excepteur. Nisi dolor dolore nostrud sunt Lorem mollit amet qui laborum minim et.\nIrure deserunt aliquip laborum aute occaecat Lorem elit dolor in ad incididunt. Irure tempor laborum mollit enim dolore ullamco fugiat elit. Adipisicing velit enim dolore fugiat enim anim quis sit velit nulla dolor. Voluptate nostrud dolor eiusmod voluptate sit aliquip sunt. Irure sit quis aliqua ex voluptate labore sit minim reprehenderit aliqua aute."
+  },
+  {
+    "id":5,
+    "title":"Elit officia commodo aute fugiat dolor ea",
+    "content":"Sit aute cillum reprehenderit commodo irure duis minim mollit deserunt. Qui ad Lorem est id exercitation incididunt ea. Elit deserunt dolor Lorem nisi do veniam non. Exercitation deserunt reprehenderit esse labore anim sit incididunt enim in adipisicing.\nIrure eiusmod cillum velit Lorem do laboris mollit et. Tempor id et voluptate laborum laboris amet consectetur. Lorem esse non aliquip elit dolor nisi anim laboris cupidatat nulla ea et dolore aliqua. Pariatur aute adipisicing aliquip amet tempor irure cillum amet nisi sint exercitation minim esse laborum. Mollit esse eu ipsum minim. Irure ut mollit nostrud ex excepteur sint nostrud officia ex minim consectetur. Deserunt ullamco laboris reprehenderit ad."
+  },
+]
+
+urls = [slugify_title(post["title"]) for post in posts_no_url]
+
+posts = [{
+  **post,
+  "slug": slugify_title(post["title"]) 
+} for post in posts_no_url]
+===== Caminho: blog/models.py =====
+from django.db import models
+
+# Create your models here.
+
+===== Caminho: blog/views.py =====
+from django.shortcuts import render
+from django.urls import reverse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+
+from .data.posts import posts
+
+# Create your views here.
+
+def home(req):
+  first_posts = posts[:3]
+  res = render(req, "blog/home.html",{
+    "posts": first_posts
+  })
+  return res
+
+def index(req):
+  res = render(req, "blog/index.html", {
+    "posts":posts
+  })
+  return res
+
+def redirect_details(req, num):
+  redirected_url = reverse("post-details", args=[posts[num-1]])
+  return HttpResponseRedirect(redirected_url)
+
+def details(req, slug):
+  post = next((post for post in posts if post.get("slug")==slug), None)
+  if post != None:
+    post_html = render(req, "blog/details.html", {
+      "post": post
+    })
+    return post_html
+  else:
+    raise Http404
+  
+===== Caminho: blog/admin.py =====
+from django.contrib import admin
+
+# Register your models here.
+
+===== Caminho: blog/__init__.py =====
+
+===== Caminho: blog/urls.py =====
+from . import views
+from django.urls import path
+
+urlpatterns = [
+    path("", views.home, name="home"),
+    path("posts/", views.index, name="index"),
+    path("posts/<int:num>/", views.redirect_details, name="numeric-details"),
+    path("posts/<str:slug>/", views.details, name="post-details"),
+]
+
+===== Caminho: blog/apps.py =====
+from django.apps import AppConfig
+
+
+class BlogConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'blog'
+
+===== Caminho: blog/tests.py =====
+from django.test import TestCase
+
+# Create your tests here.
+
+===== Caminho: blog/migrations/__init__.py =====
+
+===== Caminho: static/app.css =====
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Open Sans', 'Lato', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+
+#main-navigation {
+  width: 100%;
+  height: 5rem;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
+  padding: 0 10%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.post a {
+#main-navigation a {
   text-decoration: none;
-  color: black;
-  transition: all 0.2s ease;
-  padding: 1rem;
+  color: white;
+  font-weight: bold;
 }
 
-.post a:hover,
-.post a:active {
-  transform: scale(1.1);
-  background-color: #390281;
+#main-navigation a:hover,
+#main-navigation a:active {
+  color: #cf79f1;
+}
+
+#main-navigation h1 a:hover,
+#main-navigation h1 a:active {
   color: white;
+}
+===== Caminho: blog/static/blog/all-posts.css =====
+body {
+  background-color: #e7e7e7;
+}
+
+#main-navigation {
+  background-color: #390281;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+#all-posts {
+  margin: 7rem auto;
+  width: 90%;
+  max-width: 60rem;
+}
+
+#all-posts h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #2e2e2e;
+  margin: 3rem 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1.5rem;
 }
 
 .post img {
-  width: 5rem;
-  height: 5rem;
-  object-fit: cover;
-  border-radius: 50%;
+  width: 7rem;
+  height: 7rem;
 }
 
-.post h3 {
-  margin: 0.25rem 0;
-}
-
-.post time {
-  color: #666666;
-  margin: 0.25rem;
-  font-style: italic;
-  font-size: 0.85rem;
-}
-
-.post:hover time,
-.post:active time {
-  color: white;
+.post a {
+  height: 22rem;
+  transform-origin: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  background-color: white;
 }
 
 ===== Caminho: blog/static/blog/post-detail.css =====
@@ -447,51 +496,6 @@ main {
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
-===== Caminho: blog/static/blog/all-posts.css =====
-body {
-  background-color: #e7e7e7;
-}
-
-#main-navigation {
-  background-color: #390281;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-#all-posts {
-  margin: 7rem auto;
-  width: 90%;
-  max-width: 60rem;
-}
-
-#all-posts h2 {
-  text-align: center;
-  font-size: 2rem;
-  color: #2e2e2e;
-  margin: 3rem 0;
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-  gap: 1.5rem;
-}
-
-.post img {
-  width: 7rem;
-  height: 7rem;
-}
-
-.post a {
-  height: 22rem;
-  transform-origin: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  border-radius: 12px;
-  background-color: white;
-}
-
 ===== Caminho: blog/static/blog/index.css =====
 #welcome {
   background: linear-gradient(to right top, #6305dd, #390281);
@@ -500,7 +504,7 @@ ul {
 
 #welcome header {
   display: flex;
-  align-items: flex-start;
+  text-align: center;
   margin: 3rem auto;
 }
 
@@ -556,7 +560,7 @@ ul {
 #about {
   text-align: center;
   padding: 3rem;
-  background-color: #e48900;
+  background-color: #593412;
   margin-top: 5rem;
 }
 
@@ -569,61 +573,98 @@ ul {
   color: #353535;
 }
 
-===== Caminho: static/app.css =====
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-family: 'Open Sans', 'Lato', sans-serif;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2,
-h3 {
-  font-family: 'Lato', sans-serif;
-  font-weight: bold;
-}
-
-#main-navigation {
-  width: 100%;
-  height: 5rem;
+===== Caminho: blog/static/blog/post.css =====
+.post {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 0 10%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  text-align: center;
 }
 
-#main-navigation a {
+.post a {
   text-decoration: none;
-  color: white;
-  font-weight: bold;
+  color: black;
+  transition: all 0.2s ease;
+  padding: 1rem;
 }
 
-#main-navigation a:hover,
-#main-navigation a:active {
-  color: #cf79f1;
-}
-
-#main-navigation h1 a:hover,
-#main-navigation h1 a:active {
+.post a:hover,
+.post a:active {
+  transform: scale(1.1);
+  background-color: #390281;
   color: white;
 }
+
+.post img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.post h3 {
+  margin: 0.25rem 0;
+}
+
+.post time {
+  color: #666666;
+  margin: 0.25rem;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.post:hover time,
+.post:active time {
+  color: white;
+}
+
+===== Caminho: templates/base.html =====
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'app.css' %}"
+    />
+    {% block css_files %}{% endblock %}
+  </head>
+  <body>
+    <header id="main-navigation">
+      <h1><a href="{% url 'home' %}">John Doe's Blog</a></h1>
+      <nav>
+        <a href="{% url 'index' %}">All Posts</a>
+      </nav>
+    </header>
+
+    {% block content %} {% endblock %}
+  </body>
+</html>
+
+===== Caminho: templates/404.html =====
+{% extends "base.html" %}
+
+{% block title %}
+We didn't find that page!
+{% endblock %}
+
+{% block content %}
+  <h2>We're sorry!</h2>
+  <p>But we couldn't find that page!</p>
+{% endblock %}
 ===== Caminho: blog/templates/blog/includes/post.html =====
 {% load static %}
 
 <li>
   <article class="post">
-    <a href="{% url "post-details" post.slug %}">
+    <a href="{% url 'post-details' post.slug %}">
       <div class="post__content">
         <h3>{{ post.title }}</h3>
         <p>
@@ -635,74 +676,43 @@ h3 {
 </li>
 
 ===== Caminho: blog/templates/blog/home.html =====
-{% extends "base.html" %} 
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %} 
-My Blog 
-{% endblock %} 
+{% block title %}
+  My Blog
+{% endblock %}
 
 {% block css_files %}
-  <link rel="stylesheet" href="{% static "blog/post.css" %}" />
-  <link rel="stylesheet" href="{% static "blog/index.css" %}" />
+  <link rel="stylesheet" href="{% static 'blog/post.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/index.css' %}" />
 {% endblock %}
 
 {% block content %}
-<section id="welcome">
-  <header>
-    <img src="{% static "blog/images/max.png" %}" alt="Max - The Author Of This Blog" />
-    <h2>MAXIMILIAN'S BLOG</h2>
-  </header>
-  <p>Hi, I am Max and I love to blog about tech and the world!</p>
-</section>
+  <section id="welcome">
+    <header>
+      <h2>JOHN DOE'S BLOG</h2>
+    </header>
+    <p>Hi, I am John Doe and I love to blog about tech and the world!</p>
+  </section>
 
-<section id="latest-posts">
-  <h2>My Latest Thoughts</h2>
+  <section id="latest-posts">
+    <h2>My Latest Thoughts</h2>
 
-  <ul>
-    {% for post in posts %}
-      {% include "blog/includes/post.html" %}
-    {% endfor %}
-  </ul>
-</section>
+    <ul>
+      {% for post in posts %}
+        {% include 'blog/includes/post.html' %}
+      {% endfor %}
+    </ul>
+  </section>
 
-<section id="about">
-  <h2>What I Do</h2>
-  <p>
-    I love programming, I love to help others and I enjoy exploring new
-    technologies in general!
-  </p>
-  <p>
-    My goal is to keep on growing as a developer - and if I could help you do
-    the same, I'd be very happy!
-  </p>
-</section>
+  <section id="about">
+    <h2>What I Do</h2>
+    <p>I love programming, I love to help others and I enjoy exploring new technologies in general!</p>
+    <p>My goal is to keep on growing as a developer - and if I could help you do the same, I'd be very happy!</p>
+  </section>
 {% endblock %}
 
-===== Caminho: blog/templates/blog/index.html =====
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %} 
-All My Posts
-{% endblock %} 
-
-{% block css_files %}
-  <link rel="stylesheet" href="{% static "blog/post.css" %}" />
-  <link rel="stylesheet" href="{% static "blog/all-posts.css" %}" />
-{% endblock %}
-
-{% block content %}
-<section id="all-posts">
-  <h2>My Collected Posts</h2>
-
-  <ul>
-    {% for post in posts %}
-      {% include "blog/includes/post.html" %}
-    {% endfor %}
-  </ul>
-</section>
-{% endblock %}
 ===== Caminho: blog/templates/blog/details.html =====
 {% extends "base.html" %} 
 {% load static %} 
@@ -712,7 +722,7 @@ All My Posts
 {% endblock %} 
 
 {% block css_files %} 
-<link rel="stylesheet" href="{% static "blog/post-detail.css" %}" /> 
+<link rel="stylesheet" href="{% static 'blog/post-detail.css' %}" /> 
 {% endblock %} 
 
 {% block content %}
@@ -730,38 +740,27 @@ All My Posts
 </main>
 {% endblock %}
 
-===== Caminho: templates/404.html =====
+===== Caminho: blog/templates/blog/index.html =====
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}
-We didn't find that page!
+{% block title %} 
+All My Posts
+{% endblock %} 
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'blog/post.css' %}" />
+  <link rel="stylesheet" href="{% static 'blog/all-posts.css' %}" />
 {% endblock %}
 
 {% block content %}
-  <h2>We're sorry!</h2>
-  <p>But we couldn't find that page!</p>
+<section id="all-posts">
+  <h2>My Collected Posts</h2>
+
+  <ul>
+    {% for post in posts %}
+      {% include "blog/includes/post.html" %}
+    {% endfor %}
+  </ul>
+</section>
 {% endblock %}
-===== Caminho: templates/base.html =====
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'app.css' %}">
-  {% block css_files %}{% endblock %}
-</head>
-<body>
-  <header id="main-navigation">
-    <h1><a href="{% url 'home' %}">Max' Blog</a></h1>
-    <nav>
-      <a href="{% url 'index' %}">All Posts</a>
-    </nav>
-  </header>
-
-  {% block content %}
-  {% endblock %}
-</body>
-</html>

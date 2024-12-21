@@ -2,22 +2,27 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'app.css' %}">
-  {% block css_files %}{% endblock %}
-</head>
-<body>
-  <header id="main-navigation">
-    <h1><a href="{% url 'home' %}">Max' Blog</a></h1>
-    <nav>
-      <a href="{% url 'index' %}">All Posts</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'app.css' %}"
+    />
+    {% block css_files %}{% endblock %}
+  </head>
+  <body>
+    <header id="main-navigation">
+      <h1><a href="{% url 'home' %}">John Doe's Blog</a></h1>
+      <nav>
+        <a href="{% url 'index' %}">All Posts</a>
+      </nav>
+    </header>
 
-  {% block content %}
-  {% endblock %}
-</body>
+    {% block content %} {% endblock %}
+  </body>
 </html>
